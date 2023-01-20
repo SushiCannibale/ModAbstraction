@@ -14,6 +14,7 @@ import fr.sushi.abstraction.entities.renderers.RendererArgarok;
 import fr.sushi.abstraction.entities.renderers.RendererControlBullet;
 import fr.sushi.abstraction.entities.renderers.RendererGuardianStatue;
 import fr.sushi.abstraction.items.ModItems;
+import fr.sushi.abstraction.network.ModPacketManager;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -29,14 +30,24 @@ import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
 
+/* Moved to <ModForgeEvents> */
 public class ModEvents {
 
     @Mod.EventBusSubscriber(modid = ModAbstraction.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class CommonEvents {
+    public static class ModCommonEvents {
+        @SubscribeEvent
+        public static void commonSetup(final FMLCommonSetupEvent event) {
+            ModPacketManager.registerPackets();
+        }
 
-        public static final Logger LOGGER = LogUtils.getLogger();
+        @SubscribeEvent
+        public static void onAttributeCreation(EntityAttributeCreationEvent event) {
+            event.put(ModEntities.BOSS_GOLEM.get(), Argarok.setAttributes());
+            event.put(ModEntities.GUARDIAN_STATUE.get(), GuardianStatue.setAttributes());
+        }
 
         @SubscribeEvent
         public static void registerTab(CreativeModeTabEvent.Register event) {
@@ -51,21 +62,6 @@ public class ModEvents {
                 builder.build();
             });
         }
-
-        /* Créé les attributs de base de l'entitée */
-        @SubscribeEvent
-        public static void onAttributeCreation(EntityAttributeCreationEvent event) {
-            event.put(ModEntities.BOSS_GOLEM.get(), Argarok.setAttributes());
-            event.put(ModEntities.GUARDIAN_STATUE.get(), GuardianStatue.setAttributes());
-        }
-
-//        @SubscribeEvent
-//        public static void commonSetup(final FMLCommonSetupEvent event)
-//        {
-//            // Some common setup code
-//            LOGGER.info("HELLO FROM COMMON SETUP");
-//            LOGGER.info("DIRT BLOCK >> {}", ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
-//        }
     }
 
     @Mod.EventBusSubscriber(modid = ModAbstraction.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -87,5 +83,4 @@ public class ModEvents {
             event.registerLayerDefinition(ModelControlBullet.BULLET, ModelControlBullet::createBodyLayer);
         }
     }
-
 }

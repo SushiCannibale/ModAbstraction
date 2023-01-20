@@ -28,7 +28,7 @@ public class ModAbstraction
         ModItems.register(eventBus);
         ModEntities.register(eventBus);
 
-        eventBus.register(new ModEvents());
-        MinecraftForge.EVENT_BUS.register(ModForgeEvents.class);
+//        eventBus.register(new ModEvents()); // Homemade events
+        MinecraftForge.EVENT_BUS.register(ModForgeEvents.class); // Forge's related Events
     }
 }
