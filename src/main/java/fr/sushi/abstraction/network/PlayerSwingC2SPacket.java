@@ -8,14 +8,17 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public class PlayerSwingC2SPacket {
 
-    public PlayerSwingC2SPacket(Player player) { }
+    public PlayerSwingC2SPacket(Player player) {
 
-    public PlayerSwingC2SPacket(FriendlyByteBuf buf) { }
+    }
+
+    public PlayerSwingC2SPacket(FriendlyByteBuf buf) {
+
+    }
 
     public void encode(FriendlyByteBuf buf) {
 
@@ -25,7 +28,7 @@ public class PlayerSwingC2SPacket {
         NetworkEvent.Context ctx = ctxSupplier.get();
         ctx.enqueueWork(() -> {
             /* Server side */
-
+            System.out.println("Swing !!!!!");
 
         });
     }

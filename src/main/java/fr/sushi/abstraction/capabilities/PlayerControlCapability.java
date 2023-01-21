@@ -11,6 +11,7 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
+/* Gestion des Capabilities côté server seulement */
 public class PlayerControlCapability {
 
     private static final String ENTITY_TAG = ModAbstraction.MODID + "." + "EntityControl";

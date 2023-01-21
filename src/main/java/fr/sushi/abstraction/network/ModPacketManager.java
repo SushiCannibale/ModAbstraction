@@ -1,11 +1,11 @@
 package fr.sushi.abstraction.network;
 
 import fr.sushi.abstraction.ModAbstraction;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkInstance;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class ModPacketManager {
@@ -28,11 +28,19 @@ public class ModPacketManager {
                 .decoder(PlayerSwingC2SPacket::new)
                 .consumerMainThread(PlayerSwingC2SPacket::handle)
                 .add();
+
+        INSTANCE.messageBuilder(PlayerMoveC2SPacket.class, id())
+                .encoder(PlayerMoveC2SPacket::encode)
+                .decoder(PlayerMoveC2SPacket::new)
+                .consumerMainThread(PlayerMoveC2SPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServeur(MSG message) {
         INSTANCE.sendToServer(message);
     }
 
-
+//    public static <MSG> void sendToClient(MSG message, ServerPlayer player) {
+//        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
+//    }
 }

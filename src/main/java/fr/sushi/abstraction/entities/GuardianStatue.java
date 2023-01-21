@@ -62,7 +62,8 @@ public class GuardianStatue extends LivingEntity implements IControllable {
 
     @Override
     public void move(Vec3 playerDeltaM) {
-//        System.out.println(playerDeltaM);
+        System.out.println(playerDeltaM);
+        this.setDeltaMovement(playerDeltaM);
     }
 
     @Override
