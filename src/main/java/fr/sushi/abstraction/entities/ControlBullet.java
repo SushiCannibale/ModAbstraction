@@ -74,10 +74,13 @@ public class ControlBullet extends Projectile {
 
     /* Utilisé lorsque la bullet n'a d'effet sur aucun mob */
     private void reset() {
-        this.getOwner().getCapability(PlayerControlCapProvider.CONTROL_CAP).ifPresent(cap -> {
-            if (!cap.isControllingEntity())
-                cap.setCanShoot(true);
-        });
+        if (getOwner() != null)
+        {
+            this.getOwner().getCapability(PlayerControlCapProvider.CONTROL_CAP).ifPresent(cap -> {
+                if (!cap.isControllingEntity())
+                    cap.setCanShoot(true);
+            });
+        }
         this.discard();
     }
 

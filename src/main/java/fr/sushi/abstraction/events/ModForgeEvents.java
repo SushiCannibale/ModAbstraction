@@ -75,9 +75,8 @@ public class ModForgeEvents {
             if (!player.level.isClientSide)
                 return;
 
-            if (!(Util.isMovingAxis(player, Direction.Axis.X) || Util.isMovingAxis(player, Direction.Axis.Z))) {
+            if (!(Util.isMovingAxis(player, Direction.Axis.X) || Util.isMovingAxis(player, Direction.Axis.Z)))
                 return;
-            }
 
             /* Mouvement du joueur uniquement côté client */
             ModPacketManager.sendToServeur(new PlayerMoveC2SPacket(player));

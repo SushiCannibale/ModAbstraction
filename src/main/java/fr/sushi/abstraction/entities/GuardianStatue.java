@@ -1,8 +1,10 @@
 package fr.sushi.abstraction.entities;
 
+import fr.sushi.abstraction.capabilities.PlayerControlCapProvider;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -62,7 +64,7 @@ public class GuardianStatue extends LivingEntity implements IControllable {
 
     @Override
     public void move(Vec3 playerDeltaM) {
-        System.out.println(playerDeltaM);
+        System.out.println("ServerEntity : " + playerDeltaM);
         this.setDeltaMovement(playerDeltaM);
     }
 
@@ -89,4 +91,14 @@ public class GuardianStatue extends LivingEntity implements IControllable {
 
     @Override
     public void push(Entity pEntity) { }
+
+    @Override
+    public void die(DamageSource pDamageSource) {
+        if (this.isFree())
+            return;
+        this.getController().getCapability(PlayerControlCapProvider.CONTROL_CAP).ifPresent(cap -> {
+            cap.setCanShoot(true);
+            cap.setControlled(null);
+        });
+    }
 }

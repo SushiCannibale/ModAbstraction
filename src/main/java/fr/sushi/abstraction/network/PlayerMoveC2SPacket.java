@@ -46,7 +46,8 @@ public class PlayerMoveC2SPacket {
                 ServerLevel level = player.getLevel();
                 Entity entity = level.getEntity(capability.getControlled());
 
-                Vec3 dM = new Vec3(this.dX, entity.getDeltaMovement().y, this.dZ);
+
+                Vec3 dM = new Vec3(this.dX * 1.825, entity.getDeltaMovement().y, this.dZ * 1.825);
 
                 ((IControllable)entity).move(dM);
             });

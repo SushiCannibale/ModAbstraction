@@ -24,9 +24,8 @@ public class Debugger extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide) {
-            LazyOptional<PlayerControlCapability> opt = player.getCapability(PlayerControlCapProvider.CONTROL_CAP);
 
-            opt.ifPresent(capability -> {
+            player.getCapability(PlayerControlCapProvider.CONTROL_CAP).ifPresent(capability -> {
                 if (capability.getCanShoot()) {
                     this.shootBullet(level, player, hand);
                     capability.setCanShoot(false);
