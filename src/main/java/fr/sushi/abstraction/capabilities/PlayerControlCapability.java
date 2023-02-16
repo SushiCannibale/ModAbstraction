@@ -45,6 +45,6 @@ public class PlayerControlCapability {
     }
 
     public boolean getCanShoot() {
-        return this.canShoot && this.controlled == null;
+        return this.canShoot;
     }
 }

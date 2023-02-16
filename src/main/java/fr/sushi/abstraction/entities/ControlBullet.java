@@ -16,7 +16,8 @@ import net.minecraft.world.phys.Vec3;
 
 public class ControlBullet extends Projectile {
 
-    public static final int MAX_TICK_BEFORE_KILL = 50;
+    public static final int MAX_TICK_BEFORE_KILL = 30;
+
     public ControlBullet(EntityType<? extends Projectile> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
