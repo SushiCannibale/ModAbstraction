@@ -58,6 +58,7 @@ public class ControlBullet extends Projectile {
         if (this.tickCount >= MAX_TICK_BEFORE_KILL)
             this.reset();
 
+        /* Event triggerer de forge */
         HitResult hitresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
         if (hitresult.getType() != HitResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, hitresult)) {
             this.onHit(hitresult);
@@ -66,6 +67,7 @@ public class ControlBullet extends Projectile {
         double sine = Mth.sin(0.2f * (float)this.tickCount);
 
         Vec3 dMotion = this.getDeltaMovement().multiply(sine, sine, sine);
+        System.out.println("SINE = " + sine + " | dMotion = " + dMotion);
 
         this.setPos(this.getX() + dMotion.x, this.getY() + dMotion.y, this.getZ() + dMotion.z);
     }
