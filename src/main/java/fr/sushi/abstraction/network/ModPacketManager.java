@@ -2,10 +2,7 @@ package fr.sushi.abstraction.network;
 
 import fr.sushi.abstraction.ModAbstraction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class ModPacketManager {
@@ -29,10 +26,10 @@ public class ModPacketManager {
                 .consumerMainThread(PlayerSwingC2SPacket::handle)
                 .add();
 
-        INSTANCE.messageBuilder(PlayerMoveC2SPacket.class, id())
-                .encoder(PlayerMoveC2SPacket::encode)
-                .decoder(PlayerMoveC2SPacket::new)
-                .consumerMainThread(PlayerMoveC2SPacket::handle)
+        INSTANCE.messageBuilder(PlayerSyncC2SPacket.class, id())
+                .encoder(PlayerSyncC2SPacket::encode)
+                .decoder(PlayerSyncC2SPacket::new)
+                .consumerMainThread(PlayerSyncC2SPacket::handle)
                 .add();
     }
 

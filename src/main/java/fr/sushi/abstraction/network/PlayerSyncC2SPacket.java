@@ -10,38 +10,33 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.util.UUID;
 import java.util.function.Supplier;
 
-public class PlayerMoveC2SPacket {
+public class PlayerSyncC2SPacket {
     private static final double PLAYER_BASE_SPEED_MOD = 1.825D;
     private double dX;
     private double dZ;
-    private float pitch;
     private float yaw;
 
 
 
-    public PlayerMoveC2SPacket(Player player) {
+    public PlayerSyncC2SPacket(Player player) {
         Vec3 dM = player.getDeltaMovement();
         this.dX = dM.x;
         this.dZ = dM.z;
-        this.pitch = player.getXRot();
         this.yaw = player.getYRot();
 
     }
 
-    public PlayerMoveC2SPacket(FriendlyByteBuf buf) {
+    public PlayerSyncC2SPacket(FriendlyByteBuf buf) {
         this.dX = buf.readDouble();
         this.dZ = buf.readDouble();
-        this.pitch = buf.readFloat();
         this.yaw = buf.readFloat();
     }
 
     public void encode(FriendlyByteBuf buf) {
         buf.writeDouble(this.dX);
         buf.writeDouble(this.dZ);
-        buf.writeFloat(this.pitch);
         buf.writeFloat(this.yaw);
     }
 
@@ -60,7 +55,6 @@ public class PlayerMoveC2SPacket {
 
 
                 Vec3 dM = new Vec3(this.dX * PLAYER_BASE_SPEED_MOD, entity.getDeltaMovement().y, this.dZ * PLAYER_BASE_SPEED_MOD);
-                entity.setXRot(this.pitch);
                 entity.setYRot(this.yaw);
                 ((IControllable)entity).move(dM);
             });

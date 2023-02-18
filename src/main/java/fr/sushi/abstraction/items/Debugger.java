@@ -3,6 +3,7 @@ package fr.sushi.abstraction.items;
 import fr.sushi.abstraction.capabilities.PlayerControlCapProvider;
 import fr.sushi.abstraction.capabilities.PlayerControlCapability;
 import fr.sushi.abstraction.entities.ControlBullet;
+import fr.sushi.abstraction.entities.EnumBulletMode;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -21,20 +22,24 @@ public class Debugger extends Item {
 
         player.getCapability(PlayerControlCapProvider.CONTROL_CAP).ifPresent(cap -> {
             if (cap.getCanShoot()){
-                shootBullet(level, player, hand);
+                this.shootBullet(level, player, hand);
                 cap.setCanShoot(false);
+            } else {
+                this.retreiveBullet();
             }
         });
 
-        return InteractionResultHolder.sidedSuccess(stack, false);
+        return InteractionResultHolder.sidedSuccess(stack, true);
     }
 
     private void shootBullet(Level level, Player player, InteractionHand hand) {
         /* Code de la snowballItem */
-        ControlBullet bullet = new ControlBullet(level, player, hand);
+        ControlBullet bullet = new ControlBullet(level, player, hand, EnumBulletMode.SEND);
         bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0f, 0.8f, 0.0f);
         level.addFreshEntity(bullet);
+    }
 
-        player.getItemInHand(hand).hurtAndBreak(1, player, (playerEvent) -> playerEvent.broadcastBreakEvent(hand));
+    private void retreiveBullet() {
+        // when bullet touches player, setCanShoot -> true
     }
 }
