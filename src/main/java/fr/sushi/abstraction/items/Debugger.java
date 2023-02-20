@@ -18,35 +18,12 @@ public class Debugger extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-<<<<<<< HEAD
-        if (!level.isClientSide) {
-
-            player.getCapability(PlayerControlCapProvider.CONTROL_CAP).ifPresent(capability -> {
-                if (capability.getCanShoot()) {
-                    this.shootBullet(level, player, hand);
-                    capability.setCanShoot(false);
-                }
-            });
-=======
         ItemStack stack = player.getItemInHand(hand);
 
-        if (level.isClientSide) {
-            return InteractionResultHolder.sidedSuccess(stack, true);
->>>>>>> 4cfbf5f7d0785f884c57e3a1b235c04e68d1fcd2
-        }
-
-        player.getCapability(PlayerControlCapProvider.CONTROL_CAP).ifPresent(capability -> {
-
-            if (capability.isControllingEntity()) {
-                this.retreiveBullet();
-                capability.setCanShoot(true);
-                capability.setControlled(null);
-                // Playsound retreive bullet
-            }
-            else if (capability.getCanShoot()) {
+        player.getCapability(PlayerControlCapProvider.CONTROL_CAP).ifPresent(cap -> {
+            if (cap.getCanShoot()){
                 this.shootBullet(level, player, hand);
-                // Playsound shoot bullet
-                capability.setCanShoot(false);
+                cap.setCanShoot(false);
             }
         });
 
@@ -63,6 +40,6 @@ public class Debugger extends Item {
     }
 
     private void retreiveBullet() {
-
+        // TODO
     }
 }
