@@ -1,7 +1,6 @@
 package fr.sushi.abstraction.items;
 
 import fr.sushi.abstraction.capabilities.PlayerControlCapProvider;
-import fr.sushi.abstraction.capabilities.PlayerControlCapability;
 import fr.sushi.abstraction.entities.ControlBullet;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -9,7 +8,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.LazyOptional;
 
 public class Debugger extends Item {
     public Debugger(Properties properties) {
@@ -21,13 +19,13 @@ public class Debugger extends Item {
         ItemStack stack = player.getItemInHand(hand);
 
         player.getCapability(PlayerControlCapProvider.CONTROL_CAP).ifPresent(cap -> {
-            if (cap.getCanShoot()){
+            if (cap.getCanShoot()) {
                 this.shootBullet(level, player, hand);
                 cap.setCanShoot(false);
             }
         });
 
-        return InteractionResultHolder.sidedSuccess(stack, false);
+        return InteractionResultHolder.sidedSuccess(stack, true);
     }
 
     private void shootBullet(Level level, Player player, InteractionHand hand) {
@@ -35,11 +33,5 @@ public class Debugger extends Item {
         ControlBullet bullet = new ControlBullet(level, player, hand);
         bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0f, 0.8f, 0.0f);
         level.addFreshEntity(bullet);
-
-        player.getItemInHand(hand).hurtAndBreak(1, player, (playerEvent) -> playerEvent.broadcastBreakEvent(hand));
-    }
-
-    private void retreiveBullet() {
-        // TODO
     }
 }

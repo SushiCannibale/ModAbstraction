@@ -15,9 +15,7 @@ public interface IControllable {
 
     void setController(Player player);
 
-    /** Appelé lorsque le controlleur se déplace */
     void move(Vec3 playerDeltaM);
 
-    /** Appelé lorsque le controlleur attaque */
     void attack();
 }

@@ -15,8 +15,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class ControlBullet extends Projectile {
-
-    public static final int MAX_TICK_BEFORE_KILL = 30;
+    private double sinePre;
 
     public ControlBullet(EntityType<? extends Projectile> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -24,13 +23,15 @@ public class ControlBullet extends Projectile {
 
     public ControlBullet(Level level, Player player, InteractionHand hand) {
         this(ModEntities.CONTROL_BULLET.get(), level);
+
+        this.sinePre = 0;
+
         this.setOwner(player);
+        float angleRad = player.getYRot() * Mth.PI / 180;
 
-        float angleRad = this.getOwner().getYRot() * Mth.PI / 180;
-
-        double x = this.getOwner().getX() + Mth.cos(angleRad) * (hand == InteractionHand.MAIN_HAND ? -0.5 : 0.5);
-        double y = this.getOwner().getY() + this.getOwner().getEyeHeight();
-        double z = this.getOwner().getZ() + Mth.sin(angleRad) * (hand == InteractionHand.MAIN_HAND ? -0.5 : 0.5);
+        double x = player.getX() + Mth.cos(angleRad) * (hand == InteractionHand.MAIN_HAND ? -0.5 : 0.5);
+        double y = player.getY() + player.getEyeHeight();
+        double z = player.getZ() + Mth.sin(angleRad) * (hand == InteractionHand.MAIN_HAND ? -0.5 : 0.5);
 
         this.setPos(x, y, z);
 
@@ -50,24 +51,31 @@ public class ControlBullet extends Projectile {
         return pDistance < 16384.0D;
     }
 
+    private boolean shouldRetreive(double sine) {
+        return sinePre < 0 && sine > 0;
+    }
+
     @Override
     public void tick() {
         super.tick();
 
-        // TODO
-        if (this.tickCount >= MAX_TICK_BEFORE_KILL)
-            this.reset();
+        double sine = Mth.sin(0.2f * (float)this.tickCount);
+        boolean hit = false;
 
+        /* Event triggerer de forge */
         HitResult hitresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
         if (hitresult.getType() != HitResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, hitresult)) {
             this.onHit(hitresult);
         }
 
-        double sine = Mth.sin(0.2f * (float)this.tickCount);
+        if (shouldRetreive(sine)) {
 
-        Vec3 dMotion = this.getDeltaMovement().multiply(sine, sine, sine);
+        } else {
+            Vec3 dMotion = this.getDeltaMovement().multiply(sine, sine, sine);
+            this.setPos(this.getX() + dMotion.x, this.getY() + dMotion.y, this.getZ() + dMotion.z);
+        }
 
-        this.setPos(this.getX() + dMotion.x, this.getY() + dMotion.y, this.getZ() + dMotion.z);
+        sinePre = sine;
     }
 
     @Override
@@ -85,11 +93,11 @@ public class ControlBullet extends Projectile {
         this.discard();
     }
 
-    @Override
-    protected void onHitBlock(BlockHitResult pResult) {
-        super.onHitBlock(pResult);
-        this.reset();
-    }
+//    @Override
+//    protected void onHitBlock(BlockHitResult pResult) {
+//        super.onHitBlock(pResult);
+//        this.reset();
+//    }
 
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
